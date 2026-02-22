@@ -1,17 +1,37 @@
 services:
   - type: web
-    name: brightworks-app
+    name: appcleanpremium-backend
     env: node
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    rootDir: backend
+    buildCommand: "npm install"
+    startCommand: "node server.js"
     envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 10000
       - key: MONGODB_URI
-        value: mongodb+srv://brightworks:4heM5D6ER6s2XUUW@cluster0.9zhmytf.mongodb.net/brightwork?retryWrites=true&w=majority
-      - key: BACKEND_URL
-        value: https://brightsbrokscleanproclean2026.onrender.com
+        sync: false
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: SENDGRID_FROM_EMAIL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRATION
+        value: "7d"
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: PUSH_PUBLIC_KEY
+        sync: false
+      - key: PUSH_PRIVATE_KEY
+        sync: false
+
+  - type: static
+    name: appcleanpremium-frontend
+    rootDir: frontend
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: dist
+    envVars:
       - key: VITE_API_URL
-        value: https://brightsbrokscleanproclean2026.onrender.com
+        sync: false
+      - key: VITE_PUSH_PUBLIC_KEY
+        sync: false
