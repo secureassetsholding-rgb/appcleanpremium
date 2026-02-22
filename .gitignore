@@ -1,0 +1,112 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+.nyc_output
+
+# Production
+dist/
+build/
+.vite/
+.next/
+out/
+
+# Misc
+.DS_Store
+*.pem
+Thumbs.db
+*.log
+*.cache
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+
+# Exclude files that don't belong to brightworks
+exclude.txt
+
+# Windows batch files and shortcuts
+*.bat
+*.lnk
+
+# Backup folders - DO NOT COMMIT THESE
+*-backup*/
+*-backup-*/
+*-copy*/
+*backup*/
+*BACKUP*/
+*COPIA*/
+*SEGURIDAD*/
+*ULTIMA*/
+*ULTRA*/
+appfuncional*/
+%USERPROFILE%/
+
+# Documentation files (temporary deployment docs)
+DEPLOY*.md
+SOLUCION*.md
+INSTRUCCIONES*.md
+URL*.md
+configurar*.md
+PASOS*.md
+PRUEBA*.md
+RESUMEN*.md
+QUICK*.md
+GUIA*.md
+
+# PDF test files
+*.pdf
+
+# HTML test files
+# Allow index.html
+!index.html
+
+# Spec files (if not needed)
+*_SPEC.md
+*_ANALYSIS*.md
+*_ENHANCED.md
+*_INTEGRATION.md
+*_COMPLETE.md
+*_FEATURES.md
+*_MODULE.md
+*_UI_UX.md
+*_STRATEGY*.md
+*_SOCIAL*.md
+*_SMART*.md
+*_WHALE*.md
+*_CLAUDE*.md
+*_CODE*.md
+

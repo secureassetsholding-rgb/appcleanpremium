@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <meta name="description" content="Bright Works Professional - Sistema de control de limpieza profesional" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="color-scheme" content="dark" />
+    
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <title>Bright Works Professional</title>
+    
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html { background: #0f172a; }
+      body {
+        font-family: 'Inter', system-ui, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        color: #e2e8f0;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+      }
+      #app-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        z-index: 9999;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+      #app-loader.hidden { opacity: 0; visibility: hidden; }
+      .loader-logo { width: 100px; height: 100px; margin-bottom: 20px; border-radius: 50%; }
+      .loader-spinner {
+        width: 40px; height: 40px;
+        border: 3px solid rgba(59, 130, 246, 0.2);
+        border-top-color: #3b82f6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      .loader-text { margin-top: 16px; font-size: 14px; color: rgba(226, 232, 240, 0.7); }
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+  </head>
+  
+  <body>
+    <div id="app-loader">
+      <img src="/brightworkslogo.png" alt="Logo" class="loader-logo" id="loader-img" />
+      <div class="loader-spinner"></div>
+      <p class="loader-text">Loading...</p>
+    </div>
+    
+    <div id="root"></div>
+    
+    <noscript>
+      <div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0f172a;color:#e2e8f0;font-family:system-ui;">
+        <p>Please enable JavaScript to use this app.</p>
+      </div>
+    </noscript>
+    
+    <script>
+      // Handle logo error without inline handler
+      document.getElementById('loader-img').addEventListener('error', function() {
+        this.style.display = 'none';
+      });
+      
+      // Remove loader
+      window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+          var loader = document.getElementById('app-loader');
+          if (loader) {
+            loader.classList.add('hidden');
+            setTimeout(function() { loader.remove(); }, 500);
+          }
+        }, 500);
+      });
+      
+      // Fallback
+      setTimeout(function() {
+        var loader = document.getElementById('app-loader');
+        if (loader) loader.classList.add('hidden');
+      }, 3000);
+    </script>
+    
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

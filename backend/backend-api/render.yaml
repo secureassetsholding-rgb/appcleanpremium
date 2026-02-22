@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: brightworks-backend
+    env: node
+    buildCommand: npm install && npm run build:frontend
+    startCommand: npm run build:start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: SENDGRID_FROM_EMAIL
+        sync: false
+    healthCheckPath: /api/health
+
+  - type: web
+    name: brightworks-frontend
+    env: node
+    buildCommand: npm install && npm run build:frontend
+    startCommand: npm run preview
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_API_URL
+        sync: false
+    staticPublishPath: ./dist
+    healthCheckPath: /
+
