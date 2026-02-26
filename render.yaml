@@ -2,7 +2,7 @@ services:
   - type: web
     name: appcleanpremium-backend
     env: node
-    rootDir: backend
+    rootDir: backend/backend-api
     buildCommand: "npm install"
     startCommand: "node server.js"
     envVars:
