@@ -306,19 +306,27 @@ if (NODE_ENV === 'development') {
 }
 
 // ============================================
-// 🔒 CORS MEJORADO
+// 🔒 CORS – allowlist para Render + dominio propio
 // ============================================
+const CORS_ALLOWED_ORIGINS = [
+  "https://appcleanpremium-frontend.onrender.com",
+  "https://secureassetsholding.com",
+  "https://www.secureassetsholding.com",
+  "http://localhost:5173"
+].map(o => o.replace(/\/$/, "")); // normalizar sin slash final para comparación
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://brightsbrokscleanproclean2026.onrender.com",
-      "https://brightsbrokscleanproclean2026-1.onrender.com"
-    ],
+    origin: (origin, cb) => {
+      if (!origin) return cb(null, true); // same-origin o peticiones sin Origin (ej. Postman)
+      const normalized = origin.replace(/\/$/, "");
+      if (CORS_ALLOWED_ORIGINS.includes(normalized)) return cb(null, true);
+      cb(new Error("Not allowed by CORS"));
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 204,
   })
 );
 
