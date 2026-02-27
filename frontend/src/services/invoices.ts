@@ -67,7 +67,7 @@ export async function finalizeInvoice(invoiceId: string): Promise<Invoice> {
 }
 
 const getApiBaseUrl = () =>
-  import.meta.env.VITE_API_URL || 'https://brightsbrokscleanproclean2026.onrender.com'
+  (import.meta.env.VITE_API_URL as string).replace(/\/$/, '')
 
 export async function downloadInvoicePdf(invoiceId: string): Promise<Blob> {
   const base = getApiBaseUrl()

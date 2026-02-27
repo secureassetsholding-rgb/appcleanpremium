@@ -1,10 +1,7 @@
 // Professional API configuration
 // Direct connection to backend, no proxy
-const BACKEND_URL = 'https://brightsbrokscleanproclean2026.onrender.com'
-
 function getApiUrl(): string {
-  // Use VITE_API_URL if available, otherwise fallback to hardcoded URL
-  return import.meta.env.VITE_API_URL || BACKEND_URL
+  return (import.meta.env.VITE_API_URL as string).replace(/\/$/, '')
 }
 
 const API_URL = getApiUrl()

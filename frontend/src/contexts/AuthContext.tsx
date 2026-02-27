@@ -99,7 +99,7 @@ const authCache = new FastAuthCache()
 // 🔐 API DE AUTENTICACIÓN OPTIMIZADA
 // ============================================================
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://brightsbrokscleanproclean2026.onrender.com'
+const API_URL = (import.meta.env.VITE_API_URL as string).replace(/\/$/, '')
 
 // Normalizar usuario para compatibilidad
 function normalizeUser(userData: any): User {

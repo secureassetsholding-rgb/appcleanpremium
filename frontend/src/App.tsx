@@ -22,7 +22,7 @@ import { RoleGuard } from './components/RoleGuard'
 import { useAuth } from './contexts/AuthContext'
 
 // Wake up backend immediately when app loads
-const BACKEND_URL = 'https://brightsbrokscleanproclean2026.onrender.com'
+const BACKEND_URL = (import.meta.env.VITE_API_URL as string).replace(/\/$/, '')
 
 function wakeUpBackend() {
   // Ping health endpoint to wake up sleeping backend
