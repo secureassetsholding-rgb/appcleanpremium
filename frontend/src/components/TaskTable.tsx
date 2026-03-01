@@ -404,7 +404,7 @@ export function TaskTable({
     </html>`
   }
 
-  const buildDailyReportHtml = () => {
+  const _buildDailyReportHtml = () => {
     const generatedAt = new Date().toLocaleString('en-US', { 
       weekday: 'long', 
       year: 'numeric', 
@@ -889,7 +889,7 @@ export function TaskTable({
     </html>`
   }
 
-  const openReportWindow = (html: string, autoPrint = false) => {
+  const _openReportWindow = (html: string, autoPrint = false) => {
     try {
       const reportWindow = window.open('', '_blank', 'noopener,noreferrer,width=1200,height=800')
       if (!reportWindow) {
@@ -912,8 +912,11 @@ export function TaskTable({
       console.error('Error opening report window:', error)
       toast.error('Failed to open report window.', { id: 'daily-loading' })
       return false
-    }
+      }
   }
+
+  // Kept for reference (PDF HTML flow removed)
+  void ([_buildSectionReportHtml, _buildDailyReportHtml, _openReportWindow] as const)
 
   const handleDailyReport = async () => {
     try {

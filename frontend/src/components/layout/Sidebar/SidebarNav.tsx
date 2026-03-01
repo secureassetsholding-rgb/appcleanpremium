@@ -23,18 +23,18 @@ function NavItem({ name, href, icon: Icon, color, isActive, onClick }: NavItemPr
       to={href}
       onClick={onClick}  // Closes menu on mobile
       className={`
-        group flex items-center gap-2 rounded-lg px-2 py-2.5 text-sm font-medium
-        transition-all duration-200 sm:gap-2.5 sm:px-3 sm:py-3 md:gap-3 md:px-4
+        group flex items-center gap-2.5 rounded-xl px-3 py-3 text-sm font-semibold
+        transition-all duration-200 sm:gap-3 sm:px-4 sm:py-3.5 md:gap-3.5
         ${
           isActive
-            ? `bg-gradient-to-r ${color} text-white shadow-lg`
-            : 'text-slate-300 hover:bg-slate-800 hover:text-white active:bg-slate-700'
+            ? `bg-gradient-to-r ${color} text-white shadow-xl shadow-black/30 ring-1 ring-white/20`
+            : 'text-slate-100 hover:bg-slate-800/90 hover:text-white active:bg-slate-700'
         }
       `}
     >
       <Icon
-        className={`h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5 ${
-          isActive ? 'text-white' : 'text-slate-400 group-hover:text-white'
+        className={`h-5 w-5 flex-shrink-0 sm:h-5 sm:w-5 ${
+          isActive ? 'text-white drop-shadow-sm' : 'text-slate-300 group-hover:text-white'
         }`}
       />
       <span className="truncate">{name}</span>
@@ -64,7 +64,7 @@ export function SidebarNav({ user, onNavigate }: SidebarNavProps) {
 
   return (
     <nav
-      className="flex-1 space-y-1 overflow-y-auto overscroll-contain px-2 py-3 sm:px-3 md:px-4"
+      className="flex-1 space-y-1.5 overflow-y-auto overscroll-contain px-2.5 py-4 sm:px-3 sm:py-5 md:px-4"
       style={{ WebkitOverflowScrolling: 'touch' }}
     >
       {filteredNav.map((item) => (

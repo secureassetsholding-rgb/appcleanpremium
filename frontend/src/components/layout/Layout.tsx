@@ -73,7 +73,7 @@ export function Layout() {
       {/* MOBILE SIDEBAR (slide-in, auto-closes on navigation) */}
       {/* ═══════════════════════════════════════════════════════════ */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 shadow-2xl shadow-black/60 transition-transform duration-300 ease-in-out lg:hidden ${
           mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -92,7 +92,7 @@ export function Layout() {
       <div className="flex">
         {/* DESKTOP SIDEBAR (collapsible) */}
         <aside 
-          className={`hidden lg:block flex-shrink-0 border-r border-slate-800 transition-all duration-300 ${
+          className={`hidden lg:block flex-shrink-0 border-r border-slate-700/80 transition-all duration-300 ${
             desktopSidebarOpen ? 'w-64' : 'w-0 overflow-hidden border-r-0'
           }`}
         >

@@ -19,7 +19,6 @@ import { apiClient } from '../services/api'
 import {
   listClientInvoices,
   createClientInvoice,
-  getInvoice,
   updateInvoice,
   finalizeInvoice,
   downloadInvoicePdf,
@@ -119,7 +118,7 @@ export default function ClientDetail() {
     recognition.lang = dictationLang
     recognitionRef.current = recognition
 
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
+    recognition.onresult = (event: Event & { results: SpeechRecognitionResultList }) => {
       const transcript = (event.results[0]?.[0]?.transcript ?? '').trim()
       if (targetField === 'description' && rowIndex !== undefined) {
         setLineItems((prev) => {

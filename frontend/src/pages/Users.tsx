@@ -244,7 +244,7 @@ export default function UsersPage() {
   // Verificar si el usuario a editar es admin/superadmin y si puede ser modificado
   const editingUser = users.find(u => u._id === activeUserId)
   const isEditingAdmin = editingUser && (editingUser.role === 'admin' || editingUser.role === 'superadmin')
-  const canModifyEditingUser = !isEditingAdmin || canModifyAdminRoles
+  void (canModifyAdminRoles && isEditingAdmin)
 
   const closeForm = () => {
     setFormVisible(false)

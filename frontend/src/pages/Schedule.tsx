@@ -309,7 +309,7 @@ export default function Schedule() {
   // Las tareas se crearán cuando el usuario las marque como completadas
 
   const updateTimeRecordMutation = useMutation({
-    mutationFn: ({ day, payload }: { day: number; payload: { checkIn?: string; checkOut?: string; signature?: string; room?: string; roomKey?: string; employeeName?: string } }) =>
+    mutationFn: ({ day, payload }: { day: number; payload: { checkIn?: string; checkOut?: string; signature?: string; room?: string; roomKey?: string; employeeName?: string; observations?: string } }) =>
       tasksService.updateTimeRecord(currentWeek, day, {
         ...payload,
         room: activeRoomLabel,

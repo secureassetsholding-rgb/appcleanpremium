@@ -5,7 +5,7 @@ export function SidebarHeader() {
     <>
       {/* Desktop Header */}
       <div className="hidden px-2 pb-2 pt-3 sm:px-3 sm:pb-3 sm:pt-4 md:block md:px-5 md:pb-5 md:pt-7">
-        <div className="rounded-lg border border-primary-500/20 bg-primary-500/10 p-2 text-center text-[9px] text-primary-100 sm:rounded-xl sm:p-2.5 sm:text-[10px] md:rounded-2xl md:p-3.5 md:text-xs">
+        <div className="rounded-xl border-2 border-primary-500/30 bg-gradient-to-br from-primary-500/20 to-primary-600/10 p-3 text-center text-[9px] text-primary-100 shadow-lg shadow-primary-500/10 sm:rounded-2xl sm:p-3.5 sm:text-[10px] md:rounded-2xl md:p-4 md:text-xs ring-1 ring-white/5">
           <img
             src="/brightworkslogo.png"
             alt="Bright Works"

@@ -6,10 +6,9 @@ export type ShareAction = 'pdf' | 'mail' | 'whatsapp' | 'telegram'
 interface ShareOptionsProps {
   onAction: (action: ShareAction) => void
   className?: string
-  label?: string
 }
 
-export function ShareOptions({ onAction, className, label = 'Share' }: ShareOptionsProps) {
+export function ShareOptions({ onAction, className }: ShareOptionsProps) {
   return (
     <div className={cn('flex flex-wrap gap-3', className)}>
       <button

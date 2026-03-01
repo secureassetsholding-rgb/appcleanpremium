@@ -51,7 +51,7 @@ export function PremiumQRCode({ value, className }: PremiumQRCodeProps) {
     }
   }, [])
 
-  const handleOpenInBrowser = (browserName: string) => {
+  const handleOpenInBrowser = (_browserName: string) => {
     const url = cleanUrl
     window.open(url, '_blank', 'noopener,noreferrer')
   }
