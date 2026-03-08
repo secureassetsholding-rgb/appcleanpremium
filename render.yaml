@@ -3,7 +3,7 @@ services:
     name: appcleanpremium-backend
     env: node
     rootDir: backend/backend-api
-    buildCommand: "npm install"
+    buildCommand: "npm install && cd ../../frontend && npm install && npm run build && cp -r dist ../backend/backend-api/"
     startCommand: "node server.js"
     envVars:
       - key: MONGODB_URI
