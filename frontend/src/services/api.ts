@@ -1,7 +1,8 @@
 // Professional API configuration
 // Direct connection to backend, no proxy
 function getApiUrl(): string {
-  return (import.meta.env.VITE_API_URL as string).replace(/\/$/, '')
+  const url = import.meta.env.VITE_API_URL as string
+  return (url || 'https://appcleanpremium-backend.onrender.com').replace(/\/$/, '')
 }
 
 const API_URL = getApiUrl()

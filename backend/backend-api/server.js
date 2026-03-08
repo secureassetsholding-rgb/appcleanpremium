@@ -238,10 +238,15 @@ if (process.env.MONGODB_URI) {
       socketTimeoutMS: 45000,
       retryWrites: true,
     })
-    .then(() => {
+    .then(async () => {
       mongoConnected = true;
       console.log('✅ MongoDB connected successfully');
       console.log(`   Database: ${mongoose.connection.name}`);
+      try {
+        await ensureSuperadminExists();
+      } catch (err) {
+        console.error('ensureSuperadminExists error:', err.message);
+      }
     })
     .catch((err) => {
       mongoConnected = false;
@@ -1831,8 +1836,36 @@ app.post('/api/bootstrap-admin', setupLimiter, async (req, res) => {
 // 1️⃣3️⃣ AUTHENTICATION
 // ============================================
 
-// Usuarios locales de respaldo (funcionan sin MongoDB)
+// Crear superadmin en MongoDB si no existe (igual que el original)
+async function ensureSuperadminExists() {
+  try {
+    const User = mongoose.model('User');
+    let superadmin = await User.findOne({ username: 'superadmin' });
+    if (!superadmin) {
+      const hashedPassword = await bcrypt.hash('superadmin123', 10);
+      superadmin = await User.create({
+        username: 'superadmin',
+        password: hashedPassword,
+        fullName: 'Super Administrator',
+        email: 'superadmin@brightworks.app',
+        role: 'superadmin',
+        isActive: true,
+        loginAttempts: 0
+      });
+      console.log('✅ Super Admin user created (superadmin / superadmin123)');
+    } else if (superadmin.role !== 'superadmin') {
+      superadmin.role = 'superadmin';
+      await superadmin.save();
+      console.log('✅ Super Admin role updated');
+    }
+  } catch (err) {
+    console.error('ensureSuperadminExists:', err.message);
+  }
+}
+
+// Usuarios locales de respaldo (funcionan sin MongoDB) - igual que el original
 const LOCAL_USERS = {
+  superadmin: { password: 'superadmin123', role: 'superadmin', fullName: 'Super Administrator' },
   admin: { password: 'admin123', role: 'admin', fullName: 'Administrator' },
   employee: { password: 'employee123', role: 'employee', fullName: 'Employee' }
 };
@@ -1851,17 +1884,22 @@ app.post('/api/login', loginLimiter, async (req, res) => {
     if (localUser && localUser.password === password) {
       console.log(`✅ Local login successful for: ${trimmedUsername}`);
       const token = jwt.sign(
-        { id: `local-${trimmedUsername}`, username: trimmedUsername, role: localUser.role },
+        { id: `local-${trimmedUsername}`, userId: `local-${trimmedUsername}`, username: trimmedUsername, fullName: localUser.fullName, role: localUser.role },
         process.env.JWT_SECRET || 'brightworks-secret-key-2024',
         { expiresIn: '7d' }
       );
+      const perms = (localUser.role === 'superadmin' || localUser.role === 'admin')
+        ? ['schedule', 'daily_report', 'dashboard', 'calendar', 'notes', 'reminders', 'expenses', 'quotes', 'clients', 'users', 'settings']
+        : ['schedule', 'daily_report'];
       return res.json({
         token,
         user: {
+          _id: `local-${trimmedUsername}`,
           id: `local-${trimmedUsername}`,
           username: trimmedUsername,
           fullName: localUser.fullName,
-          role: localUser.role
+          role: localUser.role,
+          permissions: perms
         }
       });
     }
@@ -2001,20 +2039,80 @@ app.post('/api/login', loginLimiter, async (req, res) => {
 
 app.get('/api/me', authenticateToken, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId, '-password');
-    
+    const userId = req.user.userId || req.user.id;
+    // Usuario local (superadmin, admin, employee sin MongoDB)
+    if (userId && String(userId).startsWith('local-')) {
+      return res.json({
+        user: {
+          _id: userId,
+          id: userId,
+          username: req.user.username,
+          fullName: req.user.fullName || req.user.username,
+          email: (req.user.username || '') + '@brightworks.app',
+          role: req.user.role || 'employee',
+          permissions: req.user.role === 'superadmin' || req.user.role === 'admin'
+            ? ['schedule', 'daily_report', 'dashboard', 'calendar', 'notes', 'reminders', 'expenses', 'quotes', 'clients', 'users', 'settings']
+            : ['schedule', 'daily_report']
+        }
+      });
+    }
+    const user = await User.findById(userId, '-password');
     if (!user || user.isActive === false) {
       return res.status(404).json({ message: 'User not found or inactive' });
     }
-    
-    res.json({ 
-      id: user._id, 
-      username: user.username, 
-      fullName: user.fullName, 
-      email: user.email,
-      role: user.role,
-      lastLogin: user.lastLogin,
-      createdAt: user.createdAt
+    res.json({
+      user: {
+        _id: user._id,
+        id: user._id,
+        username: user.username,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+        permissions: user.role === 'superadmin' || user.role === 'admin'
+          ? ['schedule', 'daily_report', 'dashboard', 'calendar', 'notes', 'reminders', 'expenses', 'quotes', 'clients', 'users', 'settings']
+          : (user.permissions || ['schedule', 'daily_report'])
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Alias /api/users/me (frontend AuthContext lo usa)
+app.get('/api/users/me', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.userId || req.user.id;
+    if (userId && String(userId).startsWith('local-')) {
+      return res.json({
+        user: {
+          _id: userId,
+          id: userId,
+          username: req.user.username,
+          fullName: req.user.fullName || req.user.username,
+          email: (req.user.username || '') + '@brightworks.app',
+          role: req.user.role || 'employee',
+          permissions: req.user.role === 'superadmin' || req.user.role === 'admin'
+            ? ['schedule', 'daily_report', 'dashboard', 'calendar', 'notes', 'reminders', 'expenses', 'quotes', 'clients', 'users', 'settings']
+            : ['schedule', 'daily_report']
+        }
+      });
+    }
+    const user = await User.findById(userId, '-password');
+    if (!user || user.isActive === false) {
+      return res.status(404).json({ message: 'User not found or inactive' });
+    }
+    return res.json({
+      user: {
+        _id: user._id,
+        id: user._id,
+        username: user.username,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+        permissions: user.role === 'superadmin' || user.role === 'admin'
+          ? ['schedule', 'daily_report', 'dashboard', 'calendar', 'notes', 'reminders', 'expenses', 'quotes', 'clients', 'users', 'settings']
+          : (user.permissions || ['schedule', 'daily_report'])
+      }
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

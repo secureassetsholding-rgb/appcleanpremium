@@ -6,7 +6,7 @@ import { SidebarProps } from './types'
 export function Sidebar({ user, profileAvatar, onLogout, onNavigate }: SidebarProps) {
   return (
     <div
-      className="flex h-full flex-col overflow-y-auto overscroll-contain border-r border-slate-700/80 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 shadow-2xl shadow-black/40"
+      className="flex h-full flex-col overflow-y-auto overscroll-contain border-r border-slate-800 bg-slate-900/90"
       style={{ WebkitOverflowScrolling: 'touch' }}
     >
       <SidebarHeader />
